@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# clean -- CITS4407 Assignment 2, Question 1
+#
+# Performs error checks on a CSV input, then cleans the trending YouTube
+# video data: drops the redundant ratings_disabled column, removes invalid
+# rows, de-duplicates, and strips the time component from publish_date.
+#
+# Usage:   ./clean <input.csv>
+# Example: ./clean trending_videos_unclean.csv > trending_videos_clean.csv
+#
+# Author:  Yuxing Zhou (24267814)
+# Course:  CITS4407 S1 2026 -- Open Source Tools and Scripting
+
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+EXPECTED_COLUMNS=7
+
+# ---------------------------------------------------------------------------
+# Argument capture
+# ---------------------------------------------------------------------------
+input="$1"
+
+# ---------------------------------------------------------------------------
+# Stage 1: Error checks
+#   Each check echoes the required ERROR message and exits with status 1.
+# ---------------------------------------------------------------------------
+# TODO (Commit #4): No input argument provided
+# TODO (Commit #5): Input file not found in the current directory
+# TODO (Commit #6): Input file does not have a .csv extension
+# TODO (Commit #7): Input file is empty
+# TODO (Commit #8): Header does not have $EXPECTED_COLUMNS columns
+
+# ---------------------------------------------------------------------------
+# Stage 2: Data cleaning
+#   Each step operates on the previous step's output; final result goes to
+#   stdout. The pipeline avoids leaving temporary files on disk.
+# ---------------------------------------------------------------------------
+# TODO (Commit #9):  Drop the ratings_disabled column
+# TODO (Commit #10): Trim the time portion from publish_date (keep YYYY-MM-DD)
+# TODO (Commit #11): Drop rows where video_id is empty or cell count differs
+# TODO (Commit #12): Drop rows with likes==0 or dislikes==0, then de-duplicate
+
+# ---------------------------------------------------------------------------
+# Stage 3: Output
+#   The cleaned CSV is written to stdout (redirect when calling, e.g.
+#   ./clean input.csv > clean_output.csv).
+# ---------------------------------------------------------------------------
+# (Implemented inline as part of the cleaning pipeline above.)
