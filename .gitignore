@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Editor folders
+.vscode/
+.idea/
+
+# Temp / scratch files produced during development
+tmp/
+*.tmp
+*.bak
+scratch_*
+
+# Output produced by clean script during development (we still keep the reference
+# trending_videos_clean.csv from LMS — that one stays tracked)
+output_*.csv
