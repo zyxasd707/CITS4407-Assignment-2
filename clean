@@ -38,7 +38,12 @@ if [ ! -f "$input" ]; then
     exit 1
 fi
 
-# TODO (Commit #6): Input file does not have a .csv extension
+# Error check #3: input file does not have a .csv extension
+if [[ "$input" != *.csv ]]; then
+    echo "ERROR: Input file expected in a CSV format"
+    exit 1
+fi
+
 # TODO (Commit #7): Input file is empty
 # TODO (Commit #8): Header does not have $EXPECTED_COLUMNS columns
 
