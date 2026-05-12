@@ -44,7 +44,12 @@ if [[ "$input" != *.csv ]]; then
     exit 1
 fi
 
-# TODO (Commit #7): Input file is empty
+# Error check #4: input file is empty
+if [ ! -s "$input" ]; then
+    echo "ERROR: Empty file provided"
+    exit 1
+fi
+
 # TODO (Commit #8): Header does not have $EXPECTED_COLUMNS columns
 
 # ---------------------------------------------------------------------------
