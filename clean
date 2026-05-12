@@ -32,7 +32,12 @@ if [ -z "$input" ]; then
     exit 1
 fi
 
-# TODO (Commit #5): Input file not found in the current directory
+# Error check #2: input file not found in the current directory
+if [ ! -f "$input" ]; then
+    echo "ERROR: Input file not found in the current directory"
+    exit 1
+fi
+
 # TODO (Commit #6): Input file does not have a .csv extension
 # TODO (Commit #7): Input file is empty
 # TODO (Commit #8): Header does not have $EXPECTED_COLUMNS columns
