@@ -50,7 +50,13 @@ if [ ! -s "$input" ]; then
     exit 1
 fi
 
-# TODO (Commit #8): Header does not have $EXPECTED_COLUMNS columns
+# Error check #5: header does not have $EXPECTED_COLUMNS columns
+header_columns=$(awk -F',' 'NR==1 {print NF; exit}' "$input")
+if [ "$header_columns" -ne "$EXPECTED_COLUMNS" ]; then
+    echo "ERROR: Expected 7 columns in the input"
+    exit 1
+fi
+
 
 # ---------------------------------------------------------------------------
 # Stage 2: Data cleaning
