@@ -18,3 +18,7 @@ scratch_*
 # Output produced by clean script during development (we still keep the reference
 # trending_videos_clean.csv from LMS — that one stays tracked)
 output_*.csv
+
+# Personal development/study log — kept outside submission scope; marker only
+# sees the four required deliverables (clean, analyse, prompts.pdf, git_backup).
+YuxingZhou_CITS4407_*Log.md
