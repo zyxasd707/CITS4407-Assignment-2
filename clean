@@ -63,11 +63,18 @@ fi
 #   Each step operates on the previous step's output; final result goes to
 #   stdout. The pipeline avoids leaving temporary files on disk.
 # ---------------------------------------------------------------------------
-# Step 1: drop the redundant ratings_disabled column (column 7).
-# The spec guarantees column order is fixed, so keeping fields 1-6
-# is equivalent to deleting the named column.
-cut -d',' -f1-6 "$input"
-# TODO (Commit #10): Trim the time portion from publish_date (keep YYYY-MM-DD)
+# Cleaning pipeline (extended commit-by-commit; each step is one stage):
+#   Step 1 (commit #9):  drop the redundant ratings_disabled column.
+#   Step 2 (commit #10): strip the time portion from publish_date so only
+#                        YYYY-MM-DD remains.
+# Notes:
+#  - The spec guarantees column order is fixed, so keeping fields 1-6 with
+#    cut is equivalent to deleting the named column.
+#  - The sed regex T[0-9:.]+Z matches the ISO-8601 time suffix unique to
+#    publish_date; no other field contains digits/colons between a T and Z,
+#    so the substitution is field-safe.
+cut -d',' -f1-6 "$input" \
+    | sed -E 's/T[0-9:.]+Z//'
 # TODO (Commit #11): Drop rows where video_id is empty or cell count differs
 # TODO (Commit #12): Drop rows with likes==0 or dislikes==0, then de-duplicate
 
