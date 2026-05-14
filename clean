@@ -70,11 +70,13 @@ fi
 # Notes:
 #  - The spec guarantees column order is fixed, so keeping fields 1-6 with
 #    cut is equivalent to deleting the named column.
-#  - The sed regex T[0-9:.]+Z matches the ISO-8601 time suffix unique to
-#    publish_date; no other field contains digits/colons between a T and Z,
-#    so the substitution is field-safe.
+#  - The sed regex T[0-9:.][0-9:.]*Z uses BRE-style "one or more" (an
+#    initial class followed by a starred class), mirroring the floating
+#    point pattern taught in L10 Page 22 ([0-9][0-9]*). It matches the
+#    ISO-8601 time suffix unique to publish_date; no other field contains
+#    digits/colons between a T and Z, so the substitution is field-safe.
 cut -d',' -f1-6 "$input" \
-    | sed -E 's/T[0-9:.]+Z//'
+    | sed 's/T[0-9:.][0-9:.]*Z//'
 # TODO (Commit #11): Drop rows where video_id is empty or cell count differs
 # TODO (Commit #12): Drop rows with likes==0 or dislikes==0, then de-duplicate
 
