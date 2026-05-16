@@ -73,6 +73,9 @@ fi
 #   Stage D (commit #12): drop rows with no engagement -- keep a row only if
 #                         likes (field 4) and dislikes (field 5) are both
 #                         non-zero.
+#   Stage E (commit #13): de-duplicate -- drop any row whose entire content
+#                         has already appeared. '!seen[$0]++' keeps the first
+#                         occurrence and preserves the original row order.
 # Notes:
 #  - Stage A runs first, on the raw input, on purpose: once cut truncates
 #    each row to 6 fields an NF test can no longer detect rows that began
@@ -87,13 +90,18 @@ fi
 #    digits/colons between a T and Z, so the substitution is field-safe.
 #  - Stage D compares fields 4 and 5 against the numeric constant 0; fields
 #    4/5 keep their positions after Stage B because cut retains columns 1-6.
-# The pipeline now spans four stages, so it is laid out one stage per line
-# (continued with trailing backslashes) for readability.
+#  - Stage E's seen[] array records every row already emitted; '!seen[$0]++'
+#    is the standard awk idiom for order-preserving de-duplication. The
+#    header is a unique line, so it is emitted once like any first occurrence.
+# The multi-stage pipeline is laid out one stage per line (continued with
+# trailing backslashes) for readability.
 awk -F',' 'NR==1 || (NF==7 && $1!="")' "$input" \
     | cut -d',' -f1-6 \
     | sed 's/T[0-9:.][0-9:.]*Z//' \
-    | awk -F',' 'NR==1 || ($4!=0 && $5!=0)'
-# TODO (Commit #13): De-duplicate identical rows
+    | awk -F',' 'NR==1 || ($4!=0 && $5!=0)' \
+    | awk '!seen[$0]++'
+# TODO (Commit #14): Drop rows that contain an empty field (reference alignment)
+# TODO (Commit #15): Normalize boolean case TRUE/FALSE -> True/False (reference alignment)
 
 # ---------------------------------------------------------------------------
 # Stage 3: Output
