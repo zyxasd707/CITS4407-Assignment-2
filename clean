@@ -81,6 +81,11 @@ fi
 #                         reference clean.csv drops every such row; the spec
 #                         names only an empty video_id, so this stage matches
 #                         the reference's broader "no missing data" rule.
+#   Stage G (commit #15): normalize boolean case -- the input writes
+#                         comments_disabled as TRUE/FALSE (upper case) while
+#                         the reference clean.csv uses True/False. Rewrite
+#                         field 6 to match. Not one of the spec's six
+#                         operations, but required to equal the reference.
 # Notes:
 #  - Stage A runs first, on the raw input, on purpose: once cut truncates
 #    each row to 6 fields an NF test can no longer detect rows that began
@@ -98,6 +103,9 @@ fi
 #  - Stage E's seen[] array records every row already emitted; '!seen[$0]++'
 #    is the standard awk idiom for order-preserving de-duplication. The
 #    header is a unique line, so it is emitted once like any first occurrence.
+#  - Stage G sets OFS=',' so that reassigning field 6 rebuilds the row with
+#    comma separators; the trailing '1' prints every line. The header is
+#    left unchanged because its field 6 is "comments_disabled", not a boolean.
 # The multi-stage pipeline is laid out one stage per line (continued with
 # trailing backslashes) for readability.
 awk -F',' 'NR==1 || (NF==7 && $1!="")' "$input" \
@@ -105,8 +113,8 @@ awk -F',' 'NR==1 || (NF==7 && $1!="")' "$input" \
     | sed 's/T[0-9:.][0-9:.]*Z//' \
     | awk -F',' 'NR==1 || ($4!=0 && $5!=0)' \
     | awk '!seen[$0]++' \
-    | awk -F',' 'NR==1 || ($1!="" && $2!="" && $3!="" && $4!="" && $5!="" && $6!="")'
-# TODO (Commit #15): Normalize boolean case TRUE/FALSE -> True/False (reference alignment)
+    | awk -F',' 'NR==1 || ($1!="" && $2!="" && $3!="" && $4!="" && $5!="" && $6!="")' \
+    | awk -F',' -v OFS=',' '{if ($6=="TRUE") $6="True"; else if ($6=="FALSE") $6="False"} 1'
 
 # ---------------------------------------------------------------------------
 # Stage 3: Output
