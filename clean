@@ -76,6 +76,11 @@ fi
 #   Stage E (commit #13): de-duplicate -- drop any row whose entire content
 #                         has already appeared. '!seen[$0]++' keeps the first
 #                         occurrence and preserves the original row order.
+#   Stage F (commit #14): drop rows with an empty field -- keep a row only
+#                         if all six columns are non-empty. The marker's
+#                         reference clean.csv drops every such row; the spec
+#                         names only an empty video_id, so this stage matches
+#                         the reference's broader "no missing data" rule.
 # Notes:
 #  - Stage A runs first, on the raw input, on purpose: once cut truncates
 #    each row to 6 fields an NF test can no longer detect rows that began
@@ -99,8 +104,8 @@ awk -F',' 'NR==1 || (NF==7 && $1!="")' "$input" \
     | cut -d',' -f1-6 \
     | sed 's/T[0-9:.][0-9:.]*Z//' \
     | awk -F',' 'NR==1 || ($4!=0 && $5!=0)' \
-    | awk '!seen[$0]++'
-# TODO (Commit #14): Drop rows that contain an empty field (reference alignment)
+    | awk '!seen[$0]++' \
+    | awk -F',' 'NR==1 || ($1!="" && $2!="" && $3!="" && $4!="" && $5!="" && $6!="")'
 # TODO (Commit #15): Normalize boolean case TRUE/FALSE -> True/False (reference alignment)
 
 # ---------------------------------------------------------------------------
