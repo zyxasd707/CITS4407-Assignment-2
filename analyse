@@ -53,5 +53,30 @@ awk -F',' '
     }
     END { print out }
 ' "$input"
-# TODO (Commit #20): Highest engagement rate video, ID: <id>, dated: <publish_date>
-# TODO (Commit #20): Least sentiment rate video, ID: <id>, dated: <publish_date>
+# Analysis 4 -- video with the highest engagement rate, (likes+dislikes)/views.
+# Same running-extreme + tie-list pattern as Analysis 3. The "$3 > 0" guard
+# skips any row with zero views, which would otherwise divide by zero.
+awk -F',' '
+    NR > 1 && $3 + 0 > 0 {
+        rate = ($4 + $5) / $3
+        if (!started)         { started = 1; max = rate; out = "Highest engagement rate video, ID: " $1 ", dated: " $2 }
+        else if (rate > max)  { max = rate; out = "Highest engagement rate video, ID: " $1 ", dated: " $2 }
+        else if (rate == max) { out = out "\n" "Highest engagement rate video, ID: " $1 ", dated: " $2 }
+    }
+    END { print out }
+' "$input"
+
+# Analysis 5 -- video with the least (most negative) net sentiment rate,
+# (likes-dislikes)/views.
+# Note: the printed line has a space before the comma after the ID
+# ("ID: <id> , dated:"). This deliberately reproduces the assignment's
+# sample output, which is formatted that way for this line only.
+awk -F',' '
+    NR > 1 && $3 + 0 > 0 {
+        rate = ($4 - $5) / $3
+        if (!started)         { started = 1; min = rate; out = "Least sentiment rate video, ID: " $1 " , dated: " $2 }
+        else if (rate < min)  { min = rate; out = "Least sentiment rate video, ID: " $1 " , dated: " $2 }
+        else if (rate == min) { out = out "\n" "Least sentiment rate video, ID: " $1 " , dated: " $2 }
+    }
+    END { print out }
+' "$input"
