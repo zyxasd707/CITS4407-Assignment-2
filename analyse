@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# analyse -- CITS4407 Assignment 2, Question 2
+#
+# Reads the cleaned trending YouTube video CSV (the format produced by the
+# Q1 'clean' script) and prints five summary analyses to stdout, one per
+# line, in the order required by the assignment specification.
+#
+# Usage:   ./analyse <input.csv>
+# Example: ./analyse trending_videos_clean.csv
+#
+# Author:  Yuxing Zhou (24267814)
+# Course:  CITS4407 S1 2026 -- Open Source Tools and Scripting
+
+# ---------------------------------------------------------------------------
+# Input
+#   The cleaned CSV has a header row and six columns:
+#     1 video_id  2 publish_date  3 views  4 likes  5 dislikes  6 comments_disabled
+# ---------------------------------------------------------------------------
+input="$1"
+
+# ---------------------------------------------------------------------------
+# Analyses
+#   Each analysis is added in its own commit and prints exactly one line.
+#   The output order must match the specification's sample output.
+#   Where two or more videos tie, every tied video is printed.
+# ---------------------------------------------------------------------------
+# TODO (Commit #18): Most frequent video, ID: <video_id with most occurrences>
+# TODO (Commit #18): Mean number of views: <mean of the views column, 2 d.p.>
+# TODO (Commit #19): Max dislikes video, ID: <video_id with the most dislikes>
+# TODO (Commit #20): Highest engagement rate video, ID: <id>, dated: <publish_date>
+# TODO (Commit #20): Least sentiment rate video, ID: <id>, dated: <publish_date>
