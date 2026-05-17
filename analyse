@@ -25,8 +25,23 @@ input="$1"
 #   The output order must match the specification's sample output.
 #   Where two or more videos tie, every tied video is printed.
 # ---------------------------------------------------------------------------
-# TODO (Commit #18): Most frequent video, ID: <video_id with most occurrences>
-# TODO (Commit #18): Mean number of views: <mean of the views column, 2 d.p.>
+# Analysis 1 -- most frequent video: the video_id appearing in the most rows.
+# Count rows per video_id, find the highest count, then print every video_id
+# that holds that count so any tie is fully reported.
+awk -F',' '
+    NR > 1 { count[$1]++ }
+    END {
+        for (id in count) if (count[id] > max) max = count[id]
+        for (id in count) if (count[id] == max) print "Most frequent video, ID: " id
+    }
+' "$input"
+
+# Analysis 2 -- mean of the views column, printed to two decimal places.
+awk -F',' '
+    NR > 1 { sum += $3; n++ }
+    END { printf "Mean number of views: %.2f\n", sum / n }
+' "$input"
+
 # TODO (Commit #19): Max dislikes video, ID: <video_id with the most dislikes>
 # TODO (Commit #20): Highest engagement rate video, ID: <id>, dated: <publish_date>
 # TODO (Commit #20): Least sentiment rate video, ID: <id>, dated: <publish_date>
