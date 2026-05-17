@@ -1,0 +1,8 @@
+# Force LF line endings for the submitted scripts.
+#
+# The development host is Windows (core.autocrlf=true), which would
+# otherwise check these files out with CRLF line endings. A CRLF on the
+# shebang line makes the Linux/Docker test environment fail with
+# "bad interpreter: /bin/bash^M", so the scripts are pinned to LF.
+clean   text eol=lf
+analyse text eol=lf

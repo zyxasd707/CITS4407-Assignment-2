@@ -2,9 +2,10 @@
 #
 # clean -- CITS4407 Assignment 2, Question 1
 #
-# Performs error checks on a CSV input, then cleans the trending YouTube
-# video data: drops the redundant ratings_disabled column, removes invalid
-# rows, de-duplicates, and strips the time component from publish_date.
+# Validates a CSV input, then cleans the trending YouTube video data with a
+# seven-stage stream pipeline: drops the redundant ratings_disabled column,
+# removes invalid / zero-engagement / incomplete / duplicate rows, trims the
+# time from publish_date, and normalizes the boolean column to True/False.
 #
 # Usage:   ./clean <input.csv>
 # Example: ./clean trending_videos_unclean.csv > trending_videos_clean.csv
